@@ -1,0 +1,50 @@
+{
+	"name": "webpack-react-redux-sass",
+	"version": "1.0.0",
+	"description": "webpack bundler with react, redux, and sass support",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/allaintkj/webpack-react-redux-sass.git"
+	},
+	"scripts": {
+		"build": "webpack --mode production",
+		"start": "webpack-dev-server --mode development"
+	},
+	"author": "Tom Allain",
+	"license": "",
+	"devDependencies": {
+		"babel-core": "^6.26.3",
+		"babel-eslint": "^8.2.3",
+		"babel-loader": "^7.1.4",
+		"babel-preset-env": "^1.6.1",
+		"babel-preset-react": "^6.24.1",
+		"babel-preset-stage-3": "^6.24.1",
+		"clean-webpack-plugin": "^0.1.19",
+		"compression-webpack-plugin": "^1.1.11",
+		"css-loader": "^0.28.11",
+		"eslint": "^4.19.1",
+		"eslint-loader": "^2.0.0",
+		"eslint-plugin-react": "^7.8.2",
+		"favicons-webpack-plugin": "0.0.9",
+		"file-loader": "^1.1.11",
+		"html-loader": "^0.5.5",
+		"html-webpack-plugin": "^3.2.0",
+		"mini-css-extract-plugin": "^0.4.0",
+		"node-sass": "^4.9.0",
+		"postcss": "^6.0.22",
+		"postcss-loader": "^2.1.5",
+		"react": "^16.3.2",
+		"react-dom": "^16.3.2",
+		"react-redux": "^5.0.7",
+		"react-router-dom": "^4.2.2",
+		"redux": "^4.0.0",
+		"redux-thunk": "^2.3.0",
+		"sass-loader": "^7.0.1",
+		"style-loader": "^0.21.0",
+		"stylelint": "^9.2.1",
+		"stylelint-webpack-plugin": "^0.10.5",
+		"webpack": "^4.20.2",
+		"webpack-cli": "^3.1.2",
+		"webpack-dev-server": "^3.1.4"
+	}
+}
