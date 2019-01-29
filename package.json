@@ -11,7 +11,7 @@
 		"start": "webpack-dev-server --mode development"
 	},
 	"author": "Tom Allain",
-	"license": "",
+	"license": "GPL-3.0",
 	"devDependencies": {
 		"babel-core": "^6.26.3",
 		"babel-eslint": "^8.2.3",
