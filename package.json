@@ -14,7 +14,6 @@
 	"author": "Tom Allain",
 	"license": "GPL-3.0",
 	"devDependencies": {
-		"compression-webpack-plugin": "^1.1.11",
 		"@babel/core": "^7.2.2",
 		"@babel/preset-env": "^7.3.1",
 		"@babel/preset-react": "^7.0.0",
