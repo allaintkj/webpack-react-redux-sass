@@ -1,9 +1,10 @@
 const CleanPlugin = require('clean-webpack-plugin');
 const HtmlWebPackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const StyleLintPlugin = require('stylelint-webpack-plugin');
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const FaviconsWebpackPlugin = require('favicons-webpack-plugin');
-const CompressionWebpackPlugin = require('compression-webpack-plugin');
+const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
+const StyleLintPlugin = require('stylelint-webpack-plugin');
 const path = require('path');
 
 module.exports = (env, argv) => {
@@ -11,39 +12,23 @@ module.exports = (env, argv) => {
 
 	// configure plugins
 	const cleanWebpackPlugin = new CleanPlugin(['dist']);
-
 	const htmlPlugin = new HtmlWebPackPlugin({
 		inject: true,
 		template: './src/index.html',
-		filename: 'index.html',
-		minify: {
-			removeComments: true,
-			collapseWhitespace: true,
-			removeRedundantAttributes: true,
-			useShortDoctype: true,
-			removeEmptyAttributes: true,
-			removeStyleLinkTypeAttributes: true,
-			keepClosingSlash: true,
-			minifyCSS: true,
-			minifyJS: true,
-			minifyURLs: true
-		}
+		filename: 'index.html'
 	});
-	
 	const extractCssPlugin = new MiniCssExtractPlugin({
-		filename: 'style.[hash].css'
+		filename: '[name].[hash].css'
 	});
-
 	const scssLintPlugin = new StyleLintPlugin({
 		configFile: '.stylelintrc',
-		context: 'src',
+		context: path.resolve(__dirname, 'src/'),
 		files: '**/*.scss',
 		failOnError: false,
 		quiet: false
 	});
-
 	const faviconPlugin = new FaviconsWebpackPlugin({
-		// logo: path.resolve(__dirname, ''),
+		logo: path.resolve(__dirname, 'src/img/logo.png'),
 		prefix: devMode ? '' : 'img/favicons/',
 		persistentCache: true,
 		inject: true,
@@ -62,57 +47,67 @@ module.exports = (env, argv) => {
 		}
 	});
 
-	const compressionPlugin = new CompressionWebpackPlugin({
-		deleteOriginalAsssets: true,
-		include: /\.js|.css$/
-	});
-
+	// populate array
 	let pluginArray = [htmlPlugin, scssLintPlugin, extractCssPlugin];
-	if (!devMode) { pluginArray.push(faviconPlugin, cleanWebpackPlugin, compressionPlugin); }
+	if (!devMode) { pluginArray.push(faviconPlugin, cleanWebpackPlugin); }
 
-	// configure webpack
+	// return webpack config object
 	return {
 		devServer: {
 			stats: 'minimal',
-			compress: true,
 			historyApiFallback: true,
 			host: '0.0.0.0'
 		},
-		devtool: (devMode ? 'cheap-module-eval-source-map' : ''),
+		devtool: devMode ? 'source-map' : '',
 		performance: { hints: false },
 		bail: true,
 		entry: './src/index.js',
+		optimization: {
+			minimizer: [
+				new UglifyJsPlugin({
+					cache: false,
+					parallel: true
+				}),
+				new OptimizeCSSAssetsPlugin({})
+			]
+		},
 		output: {
-			path: path.resolve('dist'),
-			publicPath: '/',
+			path: path.resolve(__dirname, 'dist/'),
 			filename: 'main.[hash].js'
 		},
 		module: {
 			rules: [{
 				test: /\.js$/,
-				include: /src/,
 				enforce: 'pre',
+				exclude: path.resolve(__dirname, 'node_modules/'),
 				use: [{
 					loader: 'babel-loader',
 					options: {
-						presets: ['env', 'react', 'babel-preset-stage-3']
+						presets: ['@babel/env', '@babel/react'],
+						minified: true,
+						comments: false,
+						compact: true
 					}
 				}, {
 					loader: 'eslint-loader'
 				}]
 			}, {
 				test: /\.(s*)css$/,
-				exclude: /node_modules/,
+				exclude: path.resolve(__dirname, 'node_modules/'),
 				use: [{
-					loader: (devMode ? 'style-loader' : MiniCssExtractPlugin.loader)
+					loader: MiniCssExtractPlugin.loader,
+					options: {
+						sourceMap: devMode ? true : false
+					}
 				}, {
-					loader: 'css-loader', options: {
-						minimize: (devMode ? false : true),
-						sourceMap: (devMode ? true : false)
+					loader: 'css-loader',
+					options: {
+						sourceMap: devMode ? true : false
 					}
 				}, {
 					loader: 'postcss-loader',
 					options: {
+						sourceMap: devMode ? true : false,
 						ident: 'postcss',
 						plugins: () => [
 							require('autoprefixer')({
@@ -125,13 +120,15 @@ module.exports = (env, argv) => {
 						]
 					}
 				}, {
-					loader: 'sass-loader', options: {
-						sourceMap: (devMode ? true : false)
+					loader: 'sass-loader',
+					options: {
+						sourceMap: devMode ? true : false
 					}
 				}]
 			}, {
 				test: /\.(gif|png|jpe?g|svg)$/i,
 				include: path.resolve(__dirname, 'src/img/'),
+				exclude: path.resolve(__dirname, 'node_modules/'),
 				use: [{
 					loader: 'file-loader',
 					options: {
@@ -141,6 +138,7 @@ module.exports = (env, argv) => {
 			}, {
 				test: /\.(woff(2)?|ttf|eot|svg)$/i,
 				include: path.resolve(__dirname, 'src/fonts/'),
+				exclude: path.resolve(__dirname, 'node_modules/'),
 				use: [{
 					loader: 'file-loader',
 					options: {
@@ -149,7 +147,7 @@ module.exports = (env, argv) => {
 				}]
 			}, {
 				test: /\.html$/,
-				exclude: /node_modules/,
+				exclude: path.resolve(__dirname, 'node_modules/'),
 				use: [{
 					loader: 'html-loader'
 				}]

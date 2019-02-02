@@ -1,8 +1,6 @@
 import React from 'react';
 import { Route, Link } from 'react-router-dom';
 
-import './../scss/style.scss';
-
 class App extends React.Component {
 	constructor() {
 		super();
