@@ -43,13 +43,13 @@
 		"mocha":   true
 	},
     "extends": [
-        "eslint:recommended", 
+        "eslint:recommended",
         "plugin:react/recommended"
     ],
     "rules": {
 		"indent": [
 			"error",
-			"tab",
+			4,
 			{
 				"MemberExpression": 1,
 				"SwitchCase": 1
@@ -223,7 +223,7 @@
 				"nonwords": false
 			}
 		],
-		
+
 		"react/prop-types": 0, // Prevent missing props validation in a React component definition
 		"react/display-name": 0, // Prevent missing displayName in a React component definition
 		"react/jsx-no-undef": 2, // Disallow undeclared variables in JSX
@@ -233,7 +233,7 @@
 		"react/no-did-mount-set-state": 2, // Prevent usage of setState in componentDidMount
 		"react/no-did-update-set-state": 2, // Prevent usage of setState in componentDidUpdate
 		"react/no-multi-comp": 0, // Prevent multiple component definition per file
-		"react/no-unknown-property": 2, // Prevent usage of unknown DOM property    
+		"react/no-unknown-property": 2, // Prevent usage of unknown DOM property
 		"react/react-in-jsx-scope": 2, // Prevent missing React when using JSX
 		"react/self-closing-comp": 2, // Prevent extra closing tags for components without children
 		"react/jsx-wrap-multilines": 0, // Prevent missing parentheses around multilines JSX

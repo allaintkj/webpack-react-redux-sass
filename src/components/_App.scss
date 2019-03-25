@@ -1,25 +1,25 @@
 .wrrs-wrapper {
-	display: flex;
-	flex-flow: column nowrap;
-	justify-content: center;
-	align-items: center;
-	padding-top: 2rem;
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: center;
+    align-items: center;
+    padding-top: 2rem;
 
-	&__heading {
-		font-family: 'Verdana', sans-serif;
-		font-size: 2rem;
-		font-weight: bold;
-		margin: 1rem 0;
-	}
+    &__heading {
+        font-family: 'Verdana', sans-serif;
+        font-size: 2rem;
+        font-weight: bold;
+        margin: 1rem 0;
+    }
 
-	&__logo {
-		animation: logo-spin infinite 20s linear;
-		height: 5rem;
-	}
+    &__logo {
+        animation: logo-spin infinite 20s linear;
+        height: 5rem;
+    }
 }
 
 @keyframes logo-spin {
-	from { transform: rotate(0deg); }
+    from { transform: rotate(0deg); }
 
-	to { transform: rotate(360deg); }
+    to { transform: rotate(360deg); }
 }

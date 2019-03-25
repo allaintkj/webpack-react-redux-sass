@@ -23,7 +23,7 @@
 		"declaration-no-important": [true, {"severity": "warning"}],
 		"no-duplicate-at-import-rules": true,
 		"indentation": [
-			"tab",
+			4,
 			{
 				"indentClosingBrace": false,
 				"severity": "warning"

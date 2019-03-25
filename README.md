@@ -18,7 +18,7 @@ npm install
 
 ### To run local dev environment (includes linting):
 ```
-npm start
+npm run dev
 ```
 
 ### Production build:
@@ -26,3 +26,9 @@ npm start
 npm run build
 ```
 Resulting deployable build will be located in /dist/ folder in project root
+
+### Serve:
+```
+npm run serve
+```
+Serves up contents of /dist/ at localhost:8000

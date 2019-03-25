@@ -13,22 +13,22 @@
 	},
 	"author": "Tom Allain",
 	"license": "GPL-3.0",
-	"devDependencies": {
+	"dependencies": {
 		"@babel/core": "^7.2.2",
 		"@babel/preset-env": "^7.3.1",
 		"@babel/preset-react": "^7.0.0",
 		"autoprefixer": "^9.4.7",
 		"babel-eslint": "^10.0.1",
 		"babel-loader": "^8.0.5",
-		"clean-webpack-plugin": "^1.0.1",
+		"clean-webpack-plugin": "^2.0.1",
 		"css-loader": "^2.1.0",
 		"eslint": "^5.13.0",
 		"eslint-loader": "^2.1.1",
 		"eslint-plugin-react": "^7.12.4",
-		"favicons-webpack-plugin": "^0.0.9",
 		"file-loader": "^3.0.1",
 		"html-loader": "^0.5.5",
 		"html-webpack-plugin": "^3.2.0",
+		"http-server": "^0.11.1",
 		"mini-css-extract-plugin": "^0.5.0",
 		"node-sass": "^4.11.0",
 		"optimize-css-assets-webpack-plugin": "^5.0.1",
@@ -37,19 +37,16 @@
 		"react": "^16.7.0",
 		"react-dom": "^16.7.0",
 		"react-redux": "^6.0.0",
-		"react-router-dom": "^4.3.1",
+		"react-router-dom": "^5.0.0",
 		"redux": "^4.0.1",
 		"redux-thunk": "^2.3.0",
 		"sass-loader": "^7.1.0",
 		"style-loader": "^0.23.1",
-		"stylelint": "^8.0.0",
+		"stylelint": "^9.10.1",
 		"stylelint-webpack-plugin": "^0.10.5",
 		"uglifyjs-webpack-plugin": "^2.1.1",
 		"webpack": "^4.29.0",
 		"webpack-cli": "^3.2.1",
 		"webpack-dev-server": "^3.1.14"
-	},
-	"dependencies": {
-		"http-server": "^0.11.1"
 	}
 }
