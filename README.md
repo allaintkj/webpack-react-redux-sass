@@ -1,7 +1,7 @@
 # functionality
 Webpack bundler with support for:
 - react and react-router
-- redux
+- redux and thunk middleware
 - babel-eslint and stylelint
 - html, css, and js minification
 
