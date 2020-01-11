@@ -1,7 +1,7 @@
 const CleanPlugin = require('clean-webpack-plugin');
 const HtmlWebPackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
+const TerserPlugin = require('terser-webpack-plugin');
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const StyleLintPlugin = require('stylelint-webpack-plugin');
 const path = require('path');
@@ -33,29 +33,28 @@ module.exports = (env, argv) => {
 
     // return webpack config object
     return {
+        bail: true,
         devServer: {
-            stats: 'minimal',
+            compress: true,
             historyApiFallback: true,
-            host: '0.0.0.0'
+            host: 'localhost',
+            hot: true,
+            stats: 'minimal'
         },
         devtool: devMode ? 'source-map' : '',
-        performance: { hints: false },
-        bail: true,
         entry: './src/index.js',
         optimization: {
             minimizer: [
-                new UglifyJsPlugin({
-                    cache: false,
-                    parallel: true
-                }),
+                new TerserPlugin(),
                 new OptimizeCSSAssetsPlugin({})
             ]
         },
         output: {
+            filename: 'main.[hash].js',
             // cleaning plugin removes this folder by default
-            path: path.resolve(__dirname, 'dist/'),
-            filename: 'main.[hash].js'
+            path: path.resolve(__dirname, 'dist/')
         },
+        plugins: pluginArray,
         module: {
             rules: [{
                 test: /\.js$/,
@@ -78,32 +77,26 @@ module.exports = (env, argv) => {
                 use: [{
                     loader: MiniCssExtractPlugin.loader,
                     options: {
-                        sourceMap: devMode ? true : false
+                        sourceMap: devMode
                     }
                 }, {
                     loader: 'css-loader',
                     options: {
-                        sourceMap: devMode ? true : false
+                        sourceMap: devMode
                     }
                 }, {
                     loader: 'postcss-loader',
                     options: {
-                        sourceMap: devMode ? true : false,
+                        sourceMap: devMode,
                         ident: 'postcss',
                         plugins: () => [
-                            require('autoprefixer')({
-                                browsers: [
-                                    '>1%',
-                                    'last 2 versions',
-                                    'not ie < 11'
-                                ]
-                            })
+                            require('autoprefixer')
                         ]
                     }
                 }, {
                     loader: 'sass-loader',
                     options: {
-                        sourceMap: devMode ? true : false
+                        sourceMap: devMode
                     }
                 }]
             }, {
@@ -133,7 +126,6 @@ module.exports = (env, argv) => {
                     loader: 'html-loader'
                 }]
             }]
-        },
-        plugins: pluginArray
+        }
     };
 };
