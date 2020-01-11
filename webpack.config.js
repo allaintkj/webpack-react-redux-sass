@@ -1,23 +1,26 @@
-const CleanPlugin = require('clean-webpack-plugin');
+const CompressionPlugin = require('compression-webpack-plugin');
 const HtmlWebPackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const TerserPlugin = require('terser-webpack-plugin');
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const StyleLintPlugin = require('stylelint-webpack-plugin');
+const TerserPlugin = require('terser-webpack-plugin');
 const path = require('path');
 
 module.exports = (env, argv) => {
     const devMode = argv.mode !== 'production';
 
     // configure plugins
-    const cleanWebpackPlugin = new CleanPlugin();
+    const compressionPlugin = new CompressionPlugin({
+        deleteOriginalAssets: true,
+        test: /\.(js|(s*)css)$/
+    });
+    const extractCssPlugin = new MiniCssExtractPlugin({
+        filename: '[name].[hash].css'
+    });
     const htmlPlugin = new HtmlWebPackPlugin({
         inject: true,
         template: './src/index.html',
         filename: 'index.html'
-    });
-    const extractCssPlugin = new MiniCssExtractPlugin({
-        filename: '[name].[hash].css'
     });
     const scssLintPlugin = new StyleLintPlugin({
         configFile: '.stylelintrc',
@@ -28,8 +31,8 @@ module.exports = (env, argv) => {
     });
 
     // populate array
-    let pluginArray = [htmlPlugin, scssLintPlugin, extractCssPlugin];
-    if (!devMode) { pluginArray.push(cleanWebpackPlugin); }
+    let pluginArray = [extractCssPlugin, htmlPlugin, scssLintPlugin];
+    if (!devMode) { pluginArray.push(compressionPlugin); }
 
     // return webpack config object
     return {
@@ -52,7 +55,8 @@ module.exports = (env, argv) => {
         output: {
             filename: 'main.[hash].js',
             // cleaning plugin removes this folder by default
-            path: path.resolve(__dirname, 'dist/')
+            path: path.resolve(__dirname, 'dist/'),
+            publicPath: '/'
         },
         plugins: pluginArray,
         module: {
@@ -100,7 +104,7 @@ module.exports = (env, argv) => {
                     }
                 }]
             }, {
-                test: /\.(gif|png|jpe?g|svg)$/i,
+                test: /\.(gif|png|jpe?g|svg|ico)$/i,
                 include: path.resolve(__dirname, 'src/img/'),
                 exclude: path.resolve(__dirname, 'node_modules/'),
                 use: [{
