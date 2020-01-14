@@ -11,7 +11,6 @@ module.exports = (env, argv) => {
 
     // configure plugins
     const compressionPlugin = new CompressionPlugin({
-        deleteOriginalAssets: true,
         test: /\.(js|(s*)css)$/
     });
     const extractCssPlugin = new MiniCssExtractPlugin({
@@ -57,6 +56,9 @@ module.exports = (env, argv) => {
             // cleaning plugin removes this folder by default
             path: path.resolve(__dirname, 'dist/'),
             publicPath: '/'
+        },
+        performance: {
+            hints: false
         },
         plugins: pluginArray,
         module: {
