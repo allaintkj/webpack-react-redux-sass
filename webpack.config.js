@@ -2,7 +2,6 @@ const CompressionPlugin = require('compression-webpack-plugin');
 const HtmlWebPackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
-const StyleLintPlugin = require('stylelint-webpack-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
 const path = require('path');
 
@@ -21,16 +20,9 @@ module.exports = (env, argv) => {
         template: './src/index.html',
         filename: 'index.html'
     });
-    const scssLintPlugin = new StyleLintPlugin({
-        configFile: '.stylelintrc',
-        context: path.resolve(__dirname, 'src/'),
-        files: '**/*.scss',
-        failOnError: false,
-        quiet: false
-    });
 
     // populate array
-    let pluginArray = [extractCssPlugin, htmlPlugin, scssLintPlugin];
+    let pluginArray = [extractCssPlugin, htmlPlugin];
     if (!devMode) { pluginArray.push(compressionPlugin); }
 
     // return webpack config object
