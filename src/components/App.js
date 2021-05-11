@@ -13,7 +13,7 @@ class App extends React.Component {
 
         return (
             <div className='wrrs-wrapper'>
-                <img src={require('./../img/logo.svg')} className='wrrs-wrapper__logo' alt='logo' />
+                <img src='./../img/logo.svg' className='wrrs-wrapper__logo' alt='logo' />
                 <div className='wrrs-wrapper__heading'>Hello, world!</div>
 
                 <Route exact path='/' component={Home} />

@@ -1,7 +1,8 @@
+const CssMinimizerPlugin = require('css-minimizer-webpack-plugin');
 const CompressionPlugin = require('compression-webpack-plugin');
+const ESLintPlugin = require('eslint-webpack-plugin');
 const HtmlWebPackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
 const path = require('path');
 
@@ -12,8 +13,9 @@ module.exports = (env, argv) => {
     const compressionPlugin = new CompressionPlugin({
         test: /\.(js|(s*)css)$/
     });
+    const eslintPlugin = new ESLintPlugin();
     const extractCssPlugin = new MiniCssExtractPlugin({
-        filename: '[name].[hash].css'
+        filename: '[name].[contenthash].css'
     });
     const htmlPlugin = new HtmlWebPackPlugin({
         inject: true,
@@ -22,29 +24,34 @@ module.exports = (env, argv) => {
     });
 
     // populate array
-    let pluginArray = [extractCssPlugin, htmlPlugin];
+    let pluginArray = [eslintPlugin, extractCssPlugin, htmlPlugin];
     if (!devMode) { pluginArray.push(compressionPlugin); }
 
     // return webpack config object
     return {
-        bail: true,
         devServer: {
             compress: true,
             historyApiFallback: true,
             host: 'localhost',
             hot: true,
-            stats: 'minimal'
+            stats: {
+                all: 'normal',
+                colors: true
+            }
         },
-        devtool: devMode ? 'source-map' : '',
+        devtool: devMode ? 'source-map' : 'eval',
         entry: './src/index.js',
         optimization: {
+            minimize: true,
             minimizer: [
-                new TerserPlugin(),
-                new OptimizeCSSAssetsPlugin({})
+                new TerserPlugin({
+                    extractComments: false
+                }),
+                new CssMinimizerPlugin()
             ]
         },
         output: {
-            filename: 'main.[hash].js',
+            filename: 'main.[contenthash].js',
             // cleaning plugin removes this folder by default
             path: path.resolve(__dirname, 'dist/'),
             publicPath: '/'
@@ -66,17 +73,12 @@ module.exports = (env, argv) => {
                         comments: false,
                         compact: true
                     }
-                }, {
-                    loader: 'eslint-loader'
                 }]
             }, {
                 test: /\.(s*)css$/,
                 exclude: path.resolve(__dirname, 'node_modules/'),
                 use: [{
-                    loader: MiniCssExtractPlugin.loader,
-                    options: {
-                        sourceMap: devMode
-                    }
+                    loader: MiniCssExtractPlugin.loader
                 }, {
                     loader: 'css-loader',
                     options: {
@@ -86,10 +88,9 @@ module.exports = (env, argv) => {
                     loader: 'postcss-loader',
                     options: {
                         sourceMap: devMode,
-                        ident: 'postcss',
-                        plugins: () => [
-                            require('autoprefixer')
-                        ]
+                        postcssOptions: {
+                            plugins: ['autoprefixer']
+                        }
                     }
                 }, {
                     loader: 'sass-loader',
