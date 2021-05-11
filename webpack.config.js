@@ -60,6 +60,7 @@ module.exports = (env, argv) => {
             hints: false
         },
         plugins: pluginArray,
+        target: ['web', 'es5'],
         module: {
             rules: [{
                 test: /\.js$/,
