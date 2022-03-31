@@ -1,5 +1,5 @@
 import React from 'react';
-import { Route, Link } from 'react-router-dom';
+import { Route, Routes, Link } from 'react-router-dom';
 
 import logo from '../img/logo.svg';
 
@@ -18,9 +18,11 @@ class App extends React.Component {
                 <img src={logo} className='wrrs-wrapper__logo' alt='logo' />
                 <div className='wrrs-wrapper__heading'>Hello, world!</div>
 
-                <Route exact path='/' component={Home} />
-                <Route path='/one' component={One} />
-                <Route path='/two' component={Two} />
+                <Routes>
+                    <Route exact path='/' element={<Home />} />
+                    <Route path='/one' element={<One />} />
+                    <Route path='/two' element={<Two />} />
+                </Routes>
 
                 <Link to='/'>Home</Link>
                 <Link to='/one'>One</Link>

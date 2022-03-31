@@ -11,6 +11,7 @@ module.exports = (env, argv) => {
 
     // configure plugins
     const compressionPlugin = new CompressionPlugin({
+        deleteOriginalAssets: true,
         test: /\.(js|(s*)css)$/
     });
     const eslintPlugin = new ESLintPlugin();
@@ -33,11 +34,7 @@ module.exports = (env, argv) => {
             compress: true,
             historyApiFallback: true,
             host: 'localhost',
-            hot: true,
-            stats: {
-                all: 'normal',
-                colors: true
-            }
+            hot: true
         },
         devtool: devMode ? 'source-map' : 'eval',
         entry: './src/index.js',
